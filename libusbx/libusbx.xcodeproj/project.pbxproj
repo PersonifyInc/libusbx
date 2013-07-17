@@ -1,0 +1,301 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BEEC3100177B582E0081B814 /* core.c in Sources */ = {isa = PBXBuildFile; fileRef = BEEC30F5177B582E0081B814 /* core.c */; };
+		BEEC3101177B582E0081B814 /* descriptor.c in Sources */ = {isa = PBXBuildFile; fileRef = BEEC30F6177B582E0081B814 /* descriptor.c */; };
+		BEEC3102177B582E0081B814 /* hotplug.c in Sources */ = {isa = PBXBuildFile; fileRef = BEEC30F7177B582E0081B814 /* hotplug.c */; };
+		BEEC3103177B582E0081B814 /* hotplug.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEC30F8177B582E0081B814 /* hotplug.h */; };
+		BEEC3104177B582E0081B814 /* io.c in Sources */ = {isa = PBXBuildFile; fileRef = BEEC30F9177B582E0081B814 /* io.c */; };
+		BEEC3105177B582E0081B814 /* libusb.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEC30FA177B582E0081B814 /* libusb.h */; };
+		BEEC3106177B582E0081B814 /* libusbi.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEC30FB177B582E0081B814 /* libusbi.h */; };
+		BEEC3107177B582E0081B814 /* strerror.c in Sources */ = {isa = PBXBuildFile; fileRef = BEEC30FC177B582E0081B814 /* strerror.c */; };
+		BEEC3108177B582E0081B814 /* sync.c in Sources */ = {isa = PBXBuildFile; fileRef = BEEC30FD177B582E0081B814 /* sync.c */; };
+		BEEC3109177B582E0081B814 /* version_nano.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEC30FE177B582E0081B814 /* version_nano.h */; };
+		BEEC310A177B582E0081B814 /* version.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEC30FF177B582E0081B814 /* version.h */; };
+		BEEC310F177B58840081B814 /* darwin_usb.c in Sources */ = {isa = PBXBuildFile; fileRef = BEEC310B177B58840081B814 /* darwin_usb.c */; };
+		BEEC3110177B58840081B814 /* darwin_usb.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEC310C177B58840081B814 /* darwin_usb.h */; };
+		BEEC3111177B58840081B814 /* poll_posix.c in Sources */ = {isa = PBXBuildFile; fileRef = BEEC310D177B58840081B814 /* poll_posix.c */; };
+		BEEC3112177B58840081B814 /* poll_posix.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEC310E177B58840081B814 /* poll_posix.h */; };
+		BEEC3115177B599E0081B814 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEC3114177B599E0081B814 /* config.h */; };
+		BEEC3117177B59B40081B814 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEEC3116177B59B40081B814 /* CoreFoundation.framework */; };
+		BEEC3119177B59BF0081B814 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEEC3118177B59BF0081B814 /* IOKit.framework */; };
+		BEEC311C177B5AF80081B814 /* threads_posix.c in Sources */ = {isa = PBXBuildFile; fileRef = BEEC311A177B5AF80081B814 /* threads_posix.c */; };
+		BEEC311D177B5AF80081B814 /* threads_posix.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEC311B177B5AF80081B814 /* threads_posix.h */; };
+		BEEC311F177B5B790081B814 /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BEEC311E177B5B780081B814 /* libobjc.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		BEEC30D3177B57B00081B814 /* libusbx.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libusbx.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEEC30F5177B582E0081B814 /* core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = core.c; path = ../libusb/core.c; sourceTree = "<group>"; };
+		BEEC30F6177B582E0081B814 /* descriptor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = descriptor.c; path = ../libusb/descriptor.c; sourceTree = "<group>"; };
+		BEEC30F7177B582E0081B814 /* hotplug.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hotplug.c; path = ../libusb/hotplug.c; sourceTree = "<group>"; };
+		BEEC30F8177B582E0081B814 /* hotplug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hotplug.h; path = ../libusb/hotplug.h; sourceTree = "<group>"; };
+		BEEC30F9177B582E0081B814 /* io.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = io.c; path = ../libusb/io.c; sourceTree = "<group>"; };
+		BEEC30FA177B582E0081B814 /* libusb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libusb.h; path = ../libusb/libusb.h; sourceTree = "<group>"; };
+		BEEC30FB177B582E0081B814 /* libusbi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libusbi.h; path = ../libusb/libusbi.h; sourceTree = "<group>"; };
+		BEEC30FC177B582E0081B814 /* strerror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = strerror.c; path = ../libusb/strerror.c; sourceTree = "<group>"; };
+		BEEC30FD177B582E0081B814 /* sync.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sync.c; path = ../libusb/sync.c; sourceTree = "<group>"; };
+		BEEC30FE177B582E0081B814 /* version_nano.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = version_nano.h; path = ../libusb/version_nano.h; sourceTree = "<group>"; };
+		BEEC30FF177B582E0081B814 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = version.h; path = ../libusb/version.h; sourceTree = "<group>"; };
+		BEEC310B177B58840081B814 /* darwin_usb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = darwin_usb.c; path = ../libusb/os/darwin_usb.c; sourceTree = "<group>"; };
+		BEEC310C177B58840081B814 /* darwin_usb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = darwin_usb.h; path = ../libusb/os/darwin_usb.h; sourceTree = "<group>"; };
+		BEEC310D177B58840081B814 /* poll_posix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = poll_posix.c; path = ../libusb/os/poll_posix.c; sourceTree = "<group>"; };
+		BEEC310E177B58840081B814 /* poll_posix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = poll_posix.h; path = ../libusb/os/poll_posix.h; sourceTree = "<group>"; };
+		BEEC3114177B599E0081B814 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		BEEC3116177B59B40081B814 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		BEEC3118177B59BF0081B814 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		BEEC311A177B5AF80081B814 /* threads_posix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = threads_posix.c; path = ../libusb/os/threads_posix.c; sourceTree = "<group>"; };
+		BEEC311B177B5AF80081B814 /* threads_posix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = threads_posix.h; path = ../libusb/os/threads_posix.h; sourceTree = "<group>"; };
+		BEEC311E177B5B780081B814 /* libobjc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.dylib; path = usr/lib/libobjc.dylib; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BEEC30D0177B57B00081B814 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEEC311F177B5B790081B814 /* libobjc.dylib in Frameworks */,
+				BEEC3119177B59BF0081B814 /* IOKit.framework in Frameworks */,
+				BEEC3117177B59B40081B814 /* CoreFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BEEC30CA177B57B00081B814 = {
+			isa = PBXGroup;
+			children = (
+				BEEC311E177B5B780081B814 /* libobjc.dylib */,
+				BEEC3118177B59BF0081B814 /* IOKit.framework */,
+				BEEC3116177B59B40081B814 /* CoreFoundation.framework */,
+				BEEC3114177B599E0081B814 /* config.h */,
+				BEEC3113177B588A0081B814 /* os */,
+				BEEC30F5177B582E0081B814 /* core.c */,
+				BEEC30F6177B582E0081B814 /* descriptor.c */,
+				BEEC30F7177B582E0081B814 /* hotplug.c */,
+				BEEC30F8177B582E0081B814 /* hotplug.h */,
+				BEEC30F9177B582E0081B814 /* io.c */,
+				BEEC30FA177B582E0081B814 /* libusb.h */,
+				BEEC30FB177B582E0081B814 /* libusbi.h */,
+				BEEC30FC177B582E0081B814 /* strerror.c */,
+				BEEC30FD177B582E0081B814 /* sync.c */,
+				BEEC30FE177B582E0081B814 /* version_nano.h */,
+				BEEC30FF177B582E0081B814 /* version.h */,
+				BEEC30D4177B57B00081B814 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BEEC30D4177B57B00081B814 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BEEC30D3177B57B00081B814 /* libusbx.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BEEC3113177B588A0081B814 /* os */ = {
+			isa = PBXGroup;
+			children = (
+				BEEC311A177B5AF80081B814 /* threads_posix.c */,
+				BEEC311B177B5AF80081B814 /* threads_posix.h */,
+				BEEC310B177B58840081B814 /* darwin_usb.c */,
+				BEEC310C177B58840081B814 /* darwin_usb.h */,
+				BEEC310D177B58840081B814 /* poll_posix.c */,
+				BEEC310E177B58840081B814 /* poll_posix.h */,
+			);
+			name = os;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		BEEC30D1177B57B00081B814 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEEC3103177B582E0081B814 /* hotplug.h in Headers */,
+				BEEC3105177B582E0081B814 /* libusb.h in Headers */,
+				BEEC3106177B582E0081B814 /* libusbi.h in Headers */,
+				BEEC3109177B582E0081B814 /* version_nano.h in Headers */,
+				BEEC310A177B582E0081B814 /* version.h in Headers */,
+				BEEC3110177B58840081B814 /* darwin_usb.h in Headers */,
+				BEEC3112177B58840081B814 /* poll_posix.h in Headers */,
+				BEEC3115177B599E0081B814 /* config.h in Headers */,
+				BEEC311D177B5AF80081B814 /* threads_posix.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		BEEC30D2177B57B00081B814 /* libusbx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BEEC30D7177B57B00081B814 /* Build configuration list for PBXNativeTarget "libusbx" */;
+			buildPhases = (
+				BEEC30CF177B57B00081B814 /* Sources */,
+				BEEC30D0177B57B00081B814 /* Frameworks */,
+				BEEC30D1177B57B00081B814 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libusbx;
+			productName = libusbx;
+			productReference = BEEC30D3177B57B00081B814 /* libusbx.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BEEC30CB177B57B00081B814 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = Personify;
+			};
+			buildConfigurationList = BEEC30CE177B57B00081B814 /* Build configuration list for PBXProject "libusbx" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = BEEC30CA177B57B00081B814;
+			productRefGroup = BEEC30D4177B57B00081B814 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BEEC30D2177B57B00081B814 /* libusbx */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BEEC30CF177B57B00081B814 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEEC3100177B582E0081B814 /* core.c in Sources */,
+				BEEC3101177B582E0081B814 /* descriptor.c in Sources */,
+				BEEC3102177B582E0081B814 /* hotplug.c in Sources */,
+				BEEC3104177B582E0081B814 /* io.c in Sources */,
+				BEEC3107177B582E0081B814 /* strerror.c in Sources */,
+				BEEC3108177B582E0081B814 /* sync.c in Sources */,
+				BEEC310F177B58840081B814 /* darwin_usb.c in Sources */,
+				BEEC3111177B58840081B814 /* poll_posix.c in Sources */,
+				BEEC311C177B5AF80081B814 /* threads_posix.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		BEEC30D5177B57B00081B814 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		BEEC30D6177B57B00081B814 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		BEEC30D8177B57B00081B814 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = "";
+				INSTALL_PATH = "@rpath";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		BEEC30D9177B57B00081B814 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = "";
+				INSTALL_PATH = "@rpath";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BEEC30CE177B57B00081B814 /* Build configuration list for PBXProject "libusbx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEEC30D5177B57B00081B814 /* Debug */,
+				BEEC30D6177B57B00081B814 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BEEC30D7177B57B00081B814 /* Build configuration list for PBXNativeTarget "libusbx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEEC30D8177B57B00081B814 /* Debug */,
+				BEEC30D9177B57B00081B814 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BEEC30CB177B57B00081B814 /* Project object */;
+}
