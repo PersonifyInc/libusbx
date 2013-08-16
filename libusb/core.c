@@ -33,6 +33,9 @@
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
+#ifdef HAVE_SYSLOG_H
+#include <syslog.h>
+#endif
 
 #ifdef __ANDROID__
 #include <android/log.h>
@@ -56,7 +59,7 @@ const struct usbi_os_backend * const usbi_backend = &wince_backend;
 #endif
 
 struct libusb_context *usbi_default_context = NULL;
-const struct libusb_version libusb_version_internal =
+static const struct libusb_version libusb_version_internal =
 	{ LIBUSB_MAJOR, LIBUSB_MINOR, LIBUSB_MICRO, LIBUSB_NANO,
 	  LIBUSB_RC, "http://libusbx.org" };
 static int default_context_refcnt = 0;
@@ -2026,10 +2029,42 @@ int usbi_gettimeofday(struct timeval *tp, void *tzp)
 }
 #endif
 
-static void usbi_log_str(struct libusb_context *ctx, const char * str)
+static void usbi_log_str(struct libusb_context *ctx,
+	enum libusb_log_level level, const char * str)
 {
-	UNUSED(ctx);
+#if defined(USE_SYSTEM_LOGGING_FACILITY)
+#if defined(OS_WINDOWS) || defined(OS_WINCE)
+	/* Windows CE only supports the Unicode version of OutputDebugString. */
+	WCHAR wbuf[USBI_MAX_LOG_LEN];
+	MultiByteToWideChar(CP_UTF8, 0, str, -1, wbuf, sizeof(wbuf));
+	OutputDebugStringW(wbuf);
+#elif defined(__ANDROID__)
+	int priority = ANDROID_LOG_UNKNOWN;
+	switch (level) {
+	case LIBUSB_LOG_LEVEL_INFO: priority = ANDROID_LOG_INFO; break;
+	case LIBUSB_LOG_LEVEL_WARNING: priority = ANDROID_LOG_WARN; break;
+	case LIBUSB_LOG_LEVEL_ERROR: priority = ANDROID_LOG_ERROR; break;
+	case LIBUSB_LOG_LEVEL_DEBUG: priority = ANDROID_LOG_DEBUG; break;
+	}
+	__android_log_write(priority, "libusb", str);
+#elif defined(HAVE_SYSLOG_FUNC)
+	int syslog_level = LOG_INFO;
+	switch (level) {
+	case LIBUSB_LOG_LEVEL_INFO: syslog_level = LOG_INFO; break;
+	case LIBUSB_LOG_LEVEL_WARNING: syslog_level = LOG_WARNING; break;
+	case LIBUSB_LOG_LEVEL_ERROR: syslog_level = LOG_ERR; break;
+	case LIBUSB_LOG_LEVEL_DEBUG: syslog_level = LOG_DEBUG; break;
+	}
+	syslog(syslog_level, "%s", str);
+#else /* All of gcc, Clang, XCode seem to use #warning */
+#warning System logging is not supported on this platform. Logging to stderr will be used instead.
 	fputs(str, stderr);
+#endif
+#else
+	fputs(str, stderr);
+#endif /* USE_SYSTEM_LOGGING_FACILITY */
+	UNUSED(ctx);
+	UNUSED(level);
 }
 
 void usbi_log_v(struct libusb_context *ctx, enum libusb_log_level level,
@@ -2059,33 +2094,11 @@ void usbi_log_v(struct libusb_context *ctx, enum libusb_log_level level,
 		return;
 #endif
 
-#ifdef __ANDROID__
-	int prio;
-	switch (level) {
-	case LOG_LEVEL_INFO:
-		prio = ANDROID_LOG_INFO;
-		break;
-	case LOG_LEVEL_WARNING:
-		prio = ANDROID_LOG_WARN;
-		break;
-	case LOG_LEVEL_ERROR:
-		prio = ANDROID_LOG_ERROR;
-		break;
-	case LOG_LEVEL_DEBUG:
-		prio = ANDROID_LOG_DEBUG;
-		break;
-	default:
-		prio = ANDROID_LOG_UNKNOWN;
-		break;
-	}
-
-	__android_log_vprint(prio, "LibUsb", format, args);
-#else
 	usbi_gettimeofday(&now, NULL);
 	if ((global_debug) && (!has_debug_header_been_displayed)) {
 		has_debug_header_been_displayed = 1;
-		usbi_log_str(ctx, "[timestamp] [threadID] facility level [function call] <message>\n");
-		usbi_log_str(ctx, "--------------------------------------------------------------------------------\n");
+		usbi_log_str(ctx, LIBUSB_LOG_LEVEL_DEBUG, "[timestamp] [threadID] facility level [function call] <message>\n");
+		usbi_log_str(ctx, LIBUSB_LOG_LEVEL_DEBUG, "--------------------------------------------------------------------------------\n");
 	}
 	if (now.tv_usec < timestamp_origin.tv_usec) {
 		now.tv_sec--;
@@ -2108,7 +2121,7 @@ void usbi_log_v(struct libusb_context *ctx, enum libusb_log_level level,
 		prefix = "debug";
 		break;
 	case LIBUSB_LOG_LEVEL_NONE:
-		break;
+		return;
 	default:
 		prefix = "unknown";
 		break;
@@ -2143,8 +2156,7 @@ void usbi_log_v(struct libusb_context *ctx, enum libusb_log_level level,
 	}
 	strcpy(buf + header_len + text_len, USBI_LOG_LINE_END);
 
-	usbi_log_str(ctx, buf);
-#endif
+	usbi_log_str(ctx, level, buf);
 }
 
 void usbi_log(struct libusb_context *ctx, enum libusb_log_level level,

@@ -1,3 +1,4 @@
+/* -*- Mode: C; c-basic-offset:8 ; indent-tabs-mode:t -*- */
 /*
  * Linux usbfs backend for libusbx
  * Copyright © 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -120,7 +121,9 @@ static int sysfs_has_descriptors = -1;
 /* how many times have we initted (and not exited) ? */
 static volatile int init_count = 0;
 
-/* Serialize hotplug start/stop, scan-devices, event-thread, and poll */
+/* Serialize hotplug start/stop */
+usbi_mutex_static_t linux_hotplug_startstop_lock = USBI_MUTEX_INITIALIZER;
+/* Serialize scan-devices, event-thread, and poll */
 usbi_mutex_static_t linux_hotplug_lock = USBI_MUTEX_INITIALIZER;
 
 static int linux_start_event_monitor(void);
@@ -419,7 +422,7 @@ static int op_init(struct libusb_context *ctx)
 	if (sysfs_has_descriptors)
 		usbi_dbg("sysfs has complete descriptors");
 
-	usbi_mutex_static_lock(&linux_hotplug_lock);
+	usbi_mutex_static_lock(&linux_hotplug_startstop_lock);
 	r = LIBUSB_SUCCESS;
 	if (init_count == 0) {
 		/* start up hotplug event handler */
@@ -433,20 +436,20 @@ static int op_init(struct libusb_context *ctx)
 			linux_stop_event_monitor();
 	} else
 		usbi_err(ctx, "error starting hotplug event monitor");
-	usbi_mutex_static_unlock(&linux_hotplug_lock);
+	usbi_mutex_static_unlock(&linux_hotplug_startstop_lock);
 
 	return r;
 }
 
 static void op_exit(void)
 {
-	usbi_mutex_static_lock(&linux_hotplug_lock);
+	usbi_mutex_static_lock(&linux_hotplug_startstop_lock);
 	assert(init_count != 0);
 	if (!--init_count) {
 		/* tear down event handler */
 		(void)linux_stop_event_monitor();
 	}
-	usbi_mutex_static_unlock(&linux_hotplug_lock);
+	usbi_mutex_static_unlock(&linux_hotplug_startstop_lock);
 }
 
 static int linux_start_event_monitor(void)
@@ -469,11 +472,19 @@ static int linux_stop_event_monitor(void)
 
 static int linux_scan_devices(struct libusb_context *ctx)
 {
+	int ret;
+
+	usbi_mutex_static_lock(&linux_hotplug_lock);
+
 #if defined(USE_UDEV)
-	return linux_udev_scan_devices(ctx);
+	ret = linux_udev_scan_devices(ctx);
 #else
-	return linux_default_scan_devices(ctx);
+	ret = linux_default_scan_devices(ctx);
 #endif
+
+	usbi_mutex_static_unlock(&linux_hotplug_lock);
+
+	return ret;
 }
 
 static void op_hotplug_poll(void)
@@ -596,6 +607,8 @@ int linux_get_device_address (struct libusb_context *ctx, int detached,
 	uint8_t *busnum, uint8_t *devaddr,const char *dev_node,
 	const char *sys_name)
 {
+	int sysfs_attr;
+
 	usbi_dbg("getting address for device: %s detached: %d", sys_name, detached);
 	/* can't use sysfs to read the bus and device number if the
 	 * device has been detached */
@@ -616,17 +629,22 @@ int linux_get_device_address (struct libusb_context *ctx, int detached,
 
 	usbi_dbg("scan %s", sys_name);
 
-	*busnum = __read_sysfs_attr(ctx, sys_name, "busnum");
-	if (0 > *busnum)
-		return *busnum;
+	sysfs_attr = __read_sysfs_attr(ctx, sys_name, "busnum");
+	if (0 > sysfs_attr)
+		return sysfs_attr;
+	if (sysfs_attr > 255)
+		return LIBUSB_ERROR_INVALID_PARAM;
+	*busnum = (uint8_t) sysfs_attr;
 
-	*devaddr = __read_sysfs_attr(ctx, sys_name, "devnum");
-	if (0 > *devaddr)
-		return *devaddr;
+	sysfs_attr = __read_sysfs_attr(ctx, sys_name, "devnum");
+	if (0 > sysfs_attr)
+		return sysfs_attr;
+	if (sysfs_attr > 255)
+		return LIBUSB_ERROR_INVALID_PARAM;
+
+	*devaddr = (uint8_t) sysfs_attr;
 
 	usbi_dbg("bus=%d dev=%d", *busnum, *devaddr);
-	if (*busnum > 255 || *devaddr > 255)
-		return LIBUSB_ERROR_INVALID_PARAM;
 
 	return LIBUSB_SUCCESS;
 }
