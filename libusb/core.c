@@ -50,6 +50,8 @@ const struct usbi_os_backend * const usbi_backend = &linux_usbfs_backend;
 const struct usbi_os_backend * const usbi_backend = &darwin_backend;
 #elif defined(OS_OPENBSD)
 const struct usbi_os_backend * const usbi_backend = &openbsd_backend;
+#elif defined(OS_NETBSD)
+const struct usbi_os_backend * const usbi_backend = &netbsd_backend;
 #elif defined(OS_WINDOWS)
 const struct usbi_os_backend * const usbi_backend = &windows_backend;
 #elif defined(OS_WINCE)
@@ -567,6 +569,10 @@ void usbi_disconnect_device(struct libusb_device *dev)
 	dev->attached = 0;
 	usbi_mutex_unlock(&dev->lock);
 
+	usbi_mutex_lock(&ctx->usb_devs_lock);
+	list_del(&dev->list);
+	usbi_mutex_unlock(&ctx->usb_devs_lock);
+
 	/* Signal that an event has occurred for this device if we support hotplug AND
 	 * the hotplug pipe is ready. This prevents an event from getting raised during
 	 * initial enumeration. libusb_handle_events will take care of dereferencing the
@@ -577,10 +583,6 @@ void usbi_disconnect_device(struct libusb_device *dev)
 			usbi_err(DEVICE_CTX(dev), "error writing hotplug message");
 		}
 	}
-
-	usbi_mutex_lock(&ctx->usb_devs_lock);
-	list_del(&dev->list);
-	usbi_mutex_unlock(&ctx->usb_devs_lock);
 }
 
 /* Perform some final sanity checks on a newly discovered device. If this
@@ -618,7 +620,7 @@ struct libusb_device *usbi_get_device_by_session_id(struct libusb_context *ctx,
 	usbi_mutex_lock(&ctx->usb_devs_lock);
 	list_for_each_entry(dev, &ctx->usb_devs, list, struct libusb_device)
 		if (dev->session_data == session_id) {
-			ret = dev;
+			ret = libusb_ref_device(dev);
 			break;
 		}
 	usbi_mutex_unlock(&ctx->usb_devs_lock);
@@ -1876,10 +1878,6 @@ err_free_ctx:
 	if (ctx == usbi_default_context)
 		usbi_default_context = NULL;
 
-	usbi_mutex_destroy(&ctx->open_devs_lock);
-	usbi_mutex_destroy(&ctx->usb_devs_lock);
-	usbi_mutex_destroy(&ctx->hotplug_cbs_lock);
-
 	usbi_mutex_static_lock(&active_contexts_lock);
 	list_del (&ctx->list);
 	usbi_mutex_static_unlock(&active_contexts_lock);
@@ -1890,6 +1888,10 @@ err_free_ctx:
 		libusb_unref_device(dev);
 	}
 	usbi_mutex_unlock(&ctx->usb_devs_lock);
+
+	usbi_mutex_destroy(&ctx->open_devs_lock);
+	usbi_mutex_destroy(&ctx->usb_devs_lock);
+	usbi_mutex_destroy(&ctx->hotplug_cbs_lock);
 
 	free(ctx);
 err_unlock:

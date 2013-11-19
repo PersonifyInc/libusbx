@@ -564,7 +564,7 @@ static int op_get_device_descriptor(struct libusb_device *dev,
 static int sysfs_get_active_config(struct libusb_device *dev, int *config)
 {
 	char *endptr;
-	char tmp[4] = {0, 0, 0, 0};
+	char tmp[5] = {0, 0, 0, 0, 0};
 	long num;
 	int fd;
 	ssize_t r;
@@ -1048,9 +1048,11 @@ int linux_enumerate_device(struct libusb_context *ctx,
 	usbi_dbg("busnum %d devaddr %d session_id %ld", busnum, devaddr,
 		session_id);
 
-	if (usbi_get_device_by_session_id(ctx, session_id)) {
+	dev = usbi_get_device_by_session_id(ctx, session_id);
+	if (dev) {
 		/* device already exists in the context */
 		usbi_dbg("session_id %ld already exists", session_id);
+		libusb_unref_device(dev);
 		return LIBUSB_SUCCESS;
 	}
 
@@ -1090,7 +1092,7 @@ void linux_hotplug_enumerate(uint8_t busnum, uint8_t devaddr, const char *sys_na
 	usbi_mutex_static_unlock(&active_contexts_lock);
 }
 
-void linux_hotplug_disconnected(uint8_t busnum, uint8_t devaddr, const char *sys_name)
+void linux_device_disconnected(uint8_t busnum, uint8_t devaddr, const char *sys_name)
 {
 	struct libusb_context *ctx;
 	struct libusb_device *dev;
@@ -1101,6 +1103,7 @@ void linux_hotplug_disconnected(uint8_t busnum, uint8_t devaddr, const char *sys
 		dev = usbi_get_device_by_session_id (ctx, session_id);
 		if (NULL != dev) {
 			usbi_disconnect_device (dev);
+			libusb_unref_device(dev);
 		} else {
 			usbi_dbg("device not found for session %x", session_id);
 		}
@@ -1265,8 +1268,20 @@ static int op_open(struct libusb_device_handle *handle)
 	int r;
 
 	hpriv->fd = _get_usbfs_fd(handle->dev, O_RDWR, 0);
-	if (hpriv->fd < 0)
+	if (hpriv->fd < 0) {
+		if (hpriv->fd == LIBUSB_ERROR_NO_DEVICE) {
+			/* device will still be marked as attached if hotplug monitor thread
+			 * hasn't processed remove event yet */
+			usbi_mutex_static_lock(&linux_hotplug_lock);
+			if (handle->dev->attached) {
+				usbi_dbg("open failed with no device, but device still attached");
+				linux_device_disconnected(handle->dev->bus_number,
+						handle->dev->device_address, NULL);
+			}
+			usbi_mutex_static_unlock(&linux_hotplug_lock);
+		}
 		return hpriv->fd;
+	}
 
 	r = ioctl(hpriv->fd, IOCTL_USBFS_GET_CAPABILITIES, &hpriv->caps);
 	if (r < 0) {
@@ -2500,6 +2515,13 @@ static int op_handle_events(struct libusb_context *ctx,
 		if (pollfd->revents & POLLERR) {
 			usbi_remove_pollfd(HANDLE_CTX(handle), hpriv->fd);
 			usbi_handle_disconnect(handle);
+			/* device will still be marked as attached if hotplug monitor thread
+			 * hasn't processed remove event yet */
+			usbi_mutex_static_lock(&linux_hotplug_lock);
+			if (handle->dev->attached)
+				linux_device_disconnected(handle->dev->bus_number,
+						handle->dev->device_address, NULL);
+			usbi_mutex_static_unlock(&linux_hotplug_lock);
 			continue;
 		}
 
