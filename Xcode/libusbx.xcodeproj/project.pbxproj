@@ -679,6 +679,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1443EE8616417E63007E0579 /* libusbx_debug.xcconfig */;
 			buildSettings = {
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -686,6 +687,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1443EE8916417EA6007E0579 /* libusbx_release.xcconfig */;
 			buildSettings = {
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
