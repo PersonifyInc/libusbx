@@ -55,13 +55,6 @@ endif()
 
 add_library(usbx SHARED ${LIBUSB_SRC} ${OS_SRC})
 
-# This prevents libraries that link against libusbx from also
-# depending on libusbx's dependencies.
-set_target_properties(usbx
-      PROPERTIES
-      LINK_INTERFACE_LIBRARIES ""
-  )
-
 if(APPLE)
 # This macro helps link OS X frameworks
 macro(ADD_FRAMEWORK fwname appname)
@@ -73,11 +66,12 @@ macro(ADD_FRAMEWORK fwname appname)
     if( ${FRAMEWORK_${fwname}} STREQUAL FRAMEWORK_${fwname}-NOTFOUND)
         MESSAGE(ERROR ": Framework ${fwname} not found")
     else()
-        TARGET_LINK_LIBRARIES(${appname} "${FRAMEWORK_${fwname}}/${fwname}")
+        TARGET_LINK_LIBRARIES(${appname} PRIVATE
+            "${FRAMEWORK_${fwname}}/${fwname}")
         MESSAGE(STATUS "Framework ${fwname} found at ${FRAMEWORK_${fwname}}")
     endif()
 endmacro(ADD_FRAMEWORK)
-target_link_libraries(usbx objc)
+target_link_libraries(usbx PRIVATE objc)
 add_framework(CoreFoundation usbx)
 add_framework(IOKit usbx)
 endif()
