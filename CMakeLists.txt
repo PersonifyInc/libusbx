@@ -63,21 +63,13 @@ set_target_properties(usbx
   )
 
 if(APPLE)
-# This macro helps link OS X frameworks
-macro(ADD_FRAMEWORK fwname appname)
-    find_library(FRAMEWORK_${fwname}
-    NAMES ${fwname}
-    PATHS ${CMAKE_OSX_SYSROOT}/System/Library
-    PATH_SUFFIXES Frameworks
-    NO_DEFAULT_PATH)
-    if( ${FRAMEWORK_${fwname}} STREQUAL FRAMEWORK_${fwname}-NOTFOUND)
-        MESSAGE(ERROR ": Framework ${fwname} not found")
-    else()
-        TARGET_LINK_LIBRARIES(${appname} "${FRAMEWORK_${fwname}}/${fwname}")
-        MESSAGE(STATUS "Framework ${fwname} found at ${FRAMEWORK_${fwname}}")
-    endif()
-endmacro(ADD_FRAMEWORK)
-target_link_libraries(usbx objc)
-add_framework(CoreFoundation usbx)
-add_framework(IOKit usbx)
+FIND_LIBRARY(CORE_FOUNDATION CoreFoundation)
+FIND_LIBRARY(IOKIT_LIB IOKit)
+
+set(MAC_OSX_FRAMEWORK_LINK_LIBS
+    ${CORE_FOUNDATION}
+    ${IOKIT_LIB})
+
+target_link_libraries(usbx ${MAC_OSX_FRAMEWORK_LINK_LIBS})
+
 endif()
